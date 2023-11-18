@@ -31,8 +31,6 @@ list_github_tags() {
 }
 
 list_all_versions() {
-	# TODO: Adapt this. By default we simply list the tag names from GitHub releases.
-	# Change this function if omc has other means of determining installable versions.
 	list_github_tags
 }
 
@@ -41,8 +39,8 @@ download_release() {
 	version="$1"
 	filename="$2"
 
-	# TODO: Adapt the release URL convention for omc
-	url="$GH_REPO/archive/v${version}.tar.gz"
+        # https://github.com/gmeghnag/omc/releases/download/v3.3.2/omc_Linux_x86_64.tar.gz
+        url="$GH_REPO/releases/download/v${version}/omc_${platform}_${arch}.tar.gz"
 
 	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
