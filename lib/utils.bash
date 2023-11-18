@@ -39,8 +39,23 @@ download_release() {
 	version="$1"
 	filename="$2"
 
-        # https://github.com/gmeghnag/omc/releases/download/v3.3.2/omc_Linux_x86_64.tar.gz
-        url="$GH_REPO/releases/download/v${version}/omc_${platform}_${arch}.tar.gz"
+	local arch
+	arch=$(uname -m)
+	#Remap names to match GitHub releases
+	[[ $arch = "aarch64" ]] && arch="arm64"
+
+	local supported_archs
+	supported_archs=("x86_64" "arm64")
+	[[ ! " ${supported_archs[*]} " =~ ${arch} ]] && fail "Sorry, $arch is not supported."
+
+	local platform
+	platform="$(uname)"
+	if [[ ${platform} == windows ]]; then
+		platform="Windows"
+	fi
+
+	# https://github.com/gmeghnag/omc/releases/download/v3.3.2/omc_Linux_x86_64.tar.gz
+	url="$GH_REPO/releases/download/v${version}/omc_${platform}_${arch}.tar.gz"
 
 	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
