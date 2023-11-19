@@ -50,14 +50,12 @@ download_release() {
 
 	local platform
 	platform="$(uname)"
-	if [[ ${platform} == windows ]]; then
-		platform="Windows"
-	fi
+	platform=${platform^}
 
 	# https://github.com/gmeghnag/omc/releases/download/v3.3.2/omc_Linux_x86_64.tar.gz
-	url="$GH_REPO/releases/download/v${version}/omc_${platform}_${arch}.tar.gz"
+	release_file="$GH_REPO/releases/download/v${version}/${TOOL_NAME}_${platform}_${arch}.tar.gz"
 
-	echo "* Downloading $TOOL_NAME release $version..."
+	echo "* Downloading $TOOL_NAME release $version from $url to $filename..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 }
 
